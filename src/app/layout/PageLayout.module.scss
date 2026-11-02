@@ -1,0 +1,63 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid #dfe4da;
+  background-color: #ffffff;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: #4a6b3a;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.link,
+.activeLink {
+  padding-block: 0.25rem;
+  text-decoration: none;
+}
+
+.activeLink {
+  border-bottom: 2px solid #4a6b3a;
+  font-weight: 600;
+}
+
+.main {
+  display: grid;
+  flex: 1;
+  gap: 1.5rem;
+  width: min(100%, 64rem);
+  margin-inline: auto;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+}
+
+.footer {
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-top: 1px solid #dfe4da;
+  color: #5b6354;
+  font-size: 0.9rem;
+}
