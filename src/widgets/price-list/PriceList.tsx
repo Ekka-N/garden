@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, Download, Printer, Search, X } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { priceCategories } from '@/entities/price-list/model/data'
-import type { PriceCategory, PriceRow, PriceSort } from '@/entities/price-list/model/types'
+import type { PriceCategory, PriceSort } from '@/entities/price-list/model/types'
+import { buildCsvRows } from '@/entities/price-list/lib/exportRows'
+import { downloadPriceListExcel } from '@/entities/price-list/lib/exportExcel'
 import {
   getCategorySummary,
   searchCategories,
@@ -36,26 +38,16 @@ function getAccordionSummary(category: PriceCategory, onlyInStock: boolean): str
   return `${count} ${pluralRu(count, 'сорт', 'сорта', 'сортов')} · ${priceLabel}`
 }
 
-function toCsvRow(category: PriceCategory, row: PriceRow, section: string): string[] {
-  const note = [row.description, row.note].filter(Boolean).join(' · ')
-
-  return [
-    category.title,
-    section,
-    row.name,
-    row.ripening ?? '',
-    note,
-    row.isNew ? 'да' : '',
-    row.price !== null ? String(row.price) : '',
-    row.price !== null ? 'в наличии' : 'нет в наличии',
-  ]
-}
-
 export function PriceList() {
   const [searchParams, setSearchParams] = useSearchParams()
   const isDesktop = useMediaQuery(DESKTOP_QUERY)
   const contentRef = useRef<HTMLDivElement>(null)
   const previousCategoryId = useRef<string | null>(null)
+  const downloadMenuRef = useRef<HTMLDivElement>(null)
+  const downloadButtonRef = useRef<HTMLButtonElement>(null)
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [exportError, setExportError] = useState<string | null>(null)
 
   const requestedCategoryId = searchParams.get('category')
   const activeCategory =
@@ -154,6 +146,35 @@ export function PriceList() {
     })
   }, [activeCategory.id])
 
+  useEffect(() => {
+    if (!isDownloadOpen) {
+      return
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!downloadMenuRef.current?.contains(event.target as Node)) {
+        setIsDownloadOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return
+      }
+
+      setIsDownloadOpen(false)
+      downloadButtonRef.current?.focus()
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isDownloadOpen])
+
   const updateParams = (updates: Record<string, string | null>, replace = false) => {
     const next = new URLSearchParams(searchParams)
 
@@ -202,29 +223,35 @@ export function PriceList() {
     updateParams({ q: value ? value : null }, true)
   }
 
+  const getDownloadFilename = (extension: string) =>
+    `prajs-list-${new Date().toISOString().slice(0, 10)}.${extension}`
+
   const handleDownloadCsv = () => {
-    const header = [
-      'Категория',
-      'Раздел',
-      'Сорт',
-      'Срок созревания',
-      'Примечание',
-      'Новинка',
-      'Цена, руб.',
-      'Наличие',
-    ]
-    const rows = priceCategories.flatMap((category) => {
-      if (category.groups?.length) {
-        return category.groups.flatMap((group) =>
-          group.rows.map((row) => toCsvRow(category, row, group.title)),
-        )
-      }
+    setIsDownloadOpen(false)
+    setExportError(null)
+    downloadCsv(getDownloadFilename('csv'), buildCsvRows(priceCategories))
+  }
 
-      return category.rows.map((row) => toCsvRow(category, row, ''))
-    })
-    const date = new Date().toISOString().slice(0, 10)
+  const handleDownloadExcel = async () => {
+    if (isExporting) {
+      return
+    }
 
-    downloadCsv(`prajs-list-${date}.csv`, [header, ...rows])
+    setIsDownloadOpen(false)
+    setExportError(null)
+    setIsExporting(true)
+
+    try {
+      await downloadPriceListExcel(
+        priceCategories,
+        getDownloadFilename('xlsx'),
+      )
+    } catch (error) {
+      console.error('Не удалось сформировать Excel-файл', error)
+      setExportError('Не удалось сформировать Excel-файл. Попробуйте ещё раз.')
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   return (
@@ -285,18 +312,72 @@ export function PriceList() {
                 <Printer aria-hidden strokeWidth={1.75} />
                 Печать
               </button>
-              <button
-                type="button"
-                className={styles.actionButton}
-                onClick={handleDownloadCsv}
-                aria-label="Скачать весь прайс в формате CSV"
-              >
-                <Download aria-hidden strokeWidth={1.75} />
-                Скачать CSV
-              </button>
+
+              <div className={styles.download} ref={downloadMenuRef}>
+                <button
+                  ref={downloadButtonRef}
+                  type="button"
+                  className={styles.actionButton}
+                  onClick={() => setIsDownloadOpen((open) => !open)}
+                  aria-haspopup="menu"
+                  aria-expanded={isDownloadOpen}
+                  aria-controls={
+                    isDownloadOpen ? 'price-download-menu' : undefined
+                  }
+                  disabled={isExporting}
+                >
+                  <Download aria-hidden strokeWidth={1.75} />
+                  {isExporting ? 'Готовим файл…' : 'Скачать'}
+                  <ChevronDown
+                    className={styles.downloadChevron}
+                    aria-hidden
+                    strokeWidth={1.75}
+                  />
+                </button>
+
+                {isDownloadOpen && (
+                  <div
+                    id="price-download-menu"
+                    className={styles.downloadMenu}
+                    role="menu"
+                    aria-label="Формат файла"
+                  >
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={styles.downloadItem}
+                      onClick={handleDownloadCsv}
+                    >
+                      <span className={styles.downloadItemLabel}>CSV</span>
+                      <span className={styles.downloadHint}>
+                        Для Excel и таблиц
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={styles.downloadItem}
+                      onClick={handleDownloadExcel}
+                    >
+                      <span className={styles.downloadItemLabel}>
+                        Excel (.xlsx)
+                      </span>
+                      <span className={styles.downloadHint}>
+                        Один лист со всеми сортами
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {exportError && (
+          <p className={styles.exportError} role="alert">
+            {exportError}
+          </p>
+        )}
 
         {isSearching ? (
           <div className={styles.searchResults}>

@@ -215,6 +215,87 @@
   height: 1rem;
 }
 
+.actionButton:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.actionButton:disabled:hover {
+  border-color: #cbd3c4;
+  background-color: #ffffff;
+}
+
+.download {
+  position: relative;
+  display: flex;
+}
+
+.downloadChevron {
+  width: 0.85rem !important;
+  height: 0.85rem !important;
+  transition: transform 0.15s ease;
+}
+
+.download .actionButton[aria-expanded='true'] .downloadChevron {
+  transform: rotate(180deg);
+}
+
+.downloadMenu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  min-width: 16rem;
+  padding: 0.35rem;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.6rem;
+  background-color: #ffffff;
+  box-shadow: 0 0.5rem 1.5rem rgba(34, 39, 31, 0.14);
+}
+
+.downloadItem {
+  display: grid;
+  gap: 0.1rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: none;
+  color: #22271f;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.downloadItem:hover {
+  background-color: #f2f6ee;
+}
+
+.downloadItem:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: -2px;
+}
+
+.downloadItemLabel {
+  font-weight: 600;
+}
+
+.downloadHint {
+  color: #5b6354;
+  font-size: 0.78rem;
+}
+
+.exportError {
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #e5c9c9;
+  border-radius: 0.5rem;
+  background-color: #fdf4f4;
+  color: #8a3d3d;
+  font-size: 0.9rem;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 17rem minmax(0, 1fr);
@@ -324,10 +405,26 @@
     flex: 1;
     justify-content: center;
   }
+
+  .download {
+    flex: 1;
+  }
+
+  .download .actionButton {
+    width: 100%;
+  }
+
+  .downloadMenu {
+    right: auto;
+    left: 0;
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .accordionButton svg {
+  .accordionButton svg,
+  .downloadChevron {
     transition: none;
   }
 }
