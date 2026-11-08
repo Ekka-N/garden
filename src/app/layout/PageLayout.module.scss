@@ -61,3 +61,18 @@
   color: #5b6354;
   font-size: 0.9rem;
 }
+
+@media print {
+  .header,
+  .footer {
+    display: none;
+  }
+
+  .main {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -1,19 +1,85 @@
 .root {
+  min-width: 0;
   padding: 1.25rem;
   border: 1px solid #d7ddd2;
   border-radius: 0.75rem;
   background-color: #ffffff;
 }
 
-.root h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1.2rem;
+.embedded {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
 }
 
-.rows {
+.head {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+
+.title {
   margin: 0;
-  padding-inline-start: 1.25rem;
-  line-height: 1.6;
+  font-size: 1.25rem;
+}
+
+.meta {
+  color: #5b6354;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.sortControl {
+  display: none;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.table thead th {
+  padding: 0.5rem 0.5rem;
+  border-bottom: 2px solid #dfe4da;
+  color: #5b6354;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid #edf0ea;
+  vertical-align: top;
+}
+
+.table tbody tr:hover {
+  background-color: #fafcf8;
+}
+
+.name {
+  font-weight: 600;
 }
 
 .badge {
@@ -25,4 +91,276 @@
   color: #3f5f2f;
   font-size: 0.75rem;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.priceHead {
+  text-align: right;
+}
+
+.table thead th.priceHead {
+  text-align: right;
+}
+
+.priceHead .sortButton {
+  margin-inline-start: auto;
+}
+
+.priceCell {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.soldOut {
+  color: #8a9083;
+}
+
+.soldOut:hover {
+  background-color: #fbfbfa;
+}
+
+.soldOutLabel {
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.sortButton svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.sortButton:hover {
+  color: #3f5f2f;
+}
+
+.sortButton:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+.groupRow th {
+  padding: 0.9rem 0.5rem 0.4rem;
+  border-bottom: 1px solid #dfe4da;
+  background-color: #f7f8f5;
+  color: #3f5f2f;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px dashed #d7ddd2;
+  border-radius: 0.5rem;
+  color: #5b6354;
+  line-height: 1.5;
+}
+
+.resetButton {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.45rem;
+  background-color: #ffffff;
+  color: #2f3a29;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.resetButton:hover {
+  border-color: #4a6b3a;
+  background-color: #f2f6ee;
+}
+
+.resetButton:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+@media (max-width: 40rem) {
+  .root {
+    padding: 1rem;
+  }
+
+  .sortControl {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+    color: #5b6354;
+    font-size: 0.85rem;
+  }
+
+  .sortControl select {
+    flex: 1;
+    min-width: 0;
+    padding: 0.45rem 0.5rem;
+    border: 1px solid #cbd3c4;
+    border-radius: 0.4rem;
+    background-color: #ffffff;
+    color: #22271f;
+    font: inherit;
+  }
+
+  .tableWrap {
+    overflow: visible;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .table tbody tr {
+    padding: 0.75rem;
+    border: 1px solid #e4e8df;
+    border-radius: 0.6rem;
+    background-color: #ffffff;
+  }
+
+  .table tbody tr:hover {
+    background-color: #ffffff;
+  }
+
+  .table td {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 7.5rem) 1fr;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+    border: 0;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    color: #5b6354;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .table td.priceCell {
+    text-align: left;
+  }
+
+  .table td.priceCell::before {
+    align-self: center;
+  }
+
+  .table .groupRow {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background-color: #f2f6ee;
+    color: #3f5f2f;
+  }
+
+  .table .groupRow th {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .table .groupRow th::before {
+    content: none;
+  }
+}
+
+@media print {
+  .root {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    break-inside: auto;
+  }
+
+  .head {
+    margin-bottom: 0.4rem;
+  }
+
+  .title {
+    font-size: 14pt;
+    break-after: avoid;
+  }
+
+  .meta {
+    color: #333333;
+    font-size: 9pt;
+  }
+
+  .sortControl,
+  .empty {
+    display: none !important;
+  }
+
+  .tableWrap {
+    overflow: visible;
+  }
+
+  .table {
+    font-size: 10pt;
+  }
+
+  .table thead {
+    display: table-header-group;
+  }
+
+  .table thead th {
+    border-bottom: 1px solid #000000;
+    color: #000000;
+  }
+
+  .table tr {
+    break-inside: avoid;
+  }
+
+  .table td {
+    padding: 0.2rem 0.35rem;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .badge {
+    border: 1px solid #777777;
+    background: none;
+    color: #000000;
+  }
+
+  .groupRow th {
+    background-color: #eeeeee !important;
+    color: #000000;
+  }
 }
