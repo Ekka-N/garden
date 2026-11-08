@@ -60,9 +60,6 @@ export function sortRows(rows: PriceRow[], sort: PriceSort): PriceRow[] {
   const sorted = [...rows]
 
   switch (sort) {
-    case 'name':
-      sorted.sort((a, b) => collator.compare(a.name, b.name))
-      break
     case 'price-asc':
       sorted.sort((a, b) => compareByPrice(a, b, 1))
       break
@@ -116,4 +113,68 @@ function compareByPrice(a: PriceRow, b: PriceRow, direction: 1 | -1): number {
 
   const priceDiff = (a.price - b.price) * direction
   return priceDiff !== 0 ? priceDiff : collator.compare(a.name, b.name)
+}
+
+function normalize(value: string): string {
+  return value.toLowerCase().replace(/ё/g, 'е').replace(/\s+/g, ' ').trim()
+}
+
+function matchesTokens(haystack: string, tokens: string[]): boolean {
+  return tokens.every((token) => haystack.includes(token))
+}
+
+/**
+ * Ищет по названию сорта, группы и категории.
+ * Если совпала категория или группа, в результат попадают все её строки.
+ */
+export function searchCategories(
+  categories: PriceCategory[],
+  query: string,
+): PriceCategory[] {
+  const tokens = normalize(query).split(' ').filter(Boolean)
+
+  if (tokens.length === 0) {
+    return categories
+  }
+
+  const result: PriceCategory[] = []
+
+  for (const category of categories) {
+    const categoryHaystack = normalize(
+      [category.title, category.shortTitle ?? ''].join(' '),
+    )
+    const categoryMatch = matchesTokens(categoryHaystack, tokens)
+
+    if (category.groups?.length) {
+      const groups = category.groups.flatMap((group) => {
+        const groupHaystack = `${categoryHaystack} ${normalize(group.title)}`
+        const groupMatch = categoryMatch || matchesTokens(groupHaystack, tokens)
+        const rows = groupMatch
+          ? group.rows
+          : group.rows.filter((row) =>
+              matchesTokens(`${groupHaystack} ${normalize(row.name)}`, tokens),
+            )
+
+        return rows.length > 0 ? [{ ...group, rows }] : []
+      })
+
+      if (groups.length > 0) {
+        result.push({ ...category, rows: [], groups })
+      }
+
+      continue
+    }
+
+    const rows = categoryMatch
+      ? category.rows
+      : category.rows.filter((row) =>
+          matchesTokens(`${categoryHaystack} ${normalize(row.name)}`, tokens),
+        )
+
+    if (rows.length > 0) {
+      result.push({ ...category, rows })
+    }
+  }
+
+  return result
 }

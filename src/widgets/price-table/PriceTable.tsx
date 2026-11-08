@@ -30,7 +30,6 @@ interface PriceTableProps {
 
 const sortOptions: { value: PriceSort; label: string }[] = [
   { value: 'default', label: 'По сроку созревания' },
-  { value: 'name', label: 'По названию' },
   { value: 'price-asc', label: 'Сначала дешевле' },
   { value: 'price-desc', label: 'Сначала дороже' },
 ]
@@ -71,15 +70,8 @@ export function PriceTable({
     metaParts.push(`${summary.inStock} в наличии`)
   }
 
-  const nameAriaSort = sort === 'name' ? 'ascending' : 'none'
   const priceAriaSort =
     sort === 'price-asc' ? 'ascending' : sort === 'price-desc' ? 'descending' : 'none'
-  const nameSortIcon =
-    sort === 'name' ? (
-      <ArrowUp aria-hidden strokeWidth={2} />
-    ) : (
-      <ArrowUpDown aria-hidden strokeWidth={2} />
-    )
   const priceSortIcon =
     sort === 'price-asc' ? (
       <ArrowUp aria-hidden strokeWidth={2} />
@@ -88,10 +80,6 @@ export function PriceTable({
     ) : (
       <ArrowUpDown aria-hidden strokeWidth={2} />
     )
-
-  const handleNameSort = () => {
-    onSortChange(sort === 'name' ? 'default' : 'name')
-  }
 
   const handlePriceSort = () => {
     if (sort === 'price-asc') {
@@ -163,20 +151,7 @@ export function PriceTable({
             </caption>
             <thead>
               <tr>
-                <th scope="col" aria-sort={nameAriaSort}>
-                  {printMode ? (
-                    'Сорт'
-                  ) : (
-                    <button
-                      type="button"
-                      className={styles.sortButton}
-                      onClick={handleNameSort}
-                    >
-                      Сорт
-                      {nameSortIcon}
-                    </button>
-                  )}
-                </th>
+                <th scope="col">Сорт</th>
                 {hasRipening && <th scope="col">Срок созревания</th>}
                 <th scope="col">Примечание</th>
                 <th scope="col" className={styles.priceHead} aria-sort={priceAriaSort}>

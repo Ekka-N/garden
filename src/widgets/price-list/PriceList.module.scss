@@ -1,5 +1,6 @@
 .screenOnly {
   display: grid;
+  align-content: start;
   gap: 1.25rem;
 }
 
@@ -33,11 +34,129 @@
 }
 
 .toolbar {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.toolbarRow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.searchField {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.6rem;
+  background-color: #ffffff;
+  color: #5b6354;
+}
+
+.searchField:focus-within {
+  border-color: #4a6b3a;
+  box-shadow: 0 0 0 3px rgba(74, 107, 58, 0.15);
+}
+
+.searchField svg {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.searchField input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: #22271f;
+  font: inherit;
+}
+
+.searchField input::placeholder {
+  color: #8a9083;
+}
+
+.searchField input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchClear {
+  display: inline-flex;
+  flex: none;
+  padding: 0.2rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: none;
+  color: #5b6354;
+  cursor: pointer;
+}
+
+.searchClear:hover {
+  background-color: #f2f6ee;
+  color: #2f3a29;
+}
+
+.searchClear:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+.searchClear svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.searchResults {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.searchList {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.searchEmpty {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px dashed #d7ddd2;
+  border-radius: 0.5rem;
+  color: #5b6354;
+  line-height: 1.5;
+}
+
+.searchEmpty p {
+  margin: 0;
+}
+
+.resetSearchButton {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.45rem;
+  background-color: #ffffff;
+  color: #2f3a29;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.resetSearchButton:hover {
+  border-color: #4a6b3a;
+  background-color: #f2f6ee;
+}
+
+.resetSearchButton:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
 }
 
 .stockToggle {
@@ -193,8 +312,8 @@
 }
 
 @media (max-width: 40rem) {
-  .toolbar {
-    justify-content: flex-start;
+  .toolbarRow {
+    align-items: stretch;
   }
 
   .actions {

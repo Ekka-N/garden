@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, Download, Printer } from 'lucide-react'
+import { ChevronDown, Download, Printer, Search, X } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { priceCategories } from '@/entities/price-list/model/data'
 import type { PriceCategory, PriceRow, PriceSort } from '@/entities/price-list/model/types'
-import { getCategorySummary } from '@/entities/price-list/lib/selectors'
+import {
+  getCategorySummary,
+  searchCategories,
+} from '@/entities/price-list/lib/selectors'
 import { downloadCsv } from '@/shared/lib/downloadCsv'
 import { formatPrice } from '@/shared/lib/formatPrice'
 import { pluralRu } from '@/shared/lib/plural'
@@ -15,7 +18,7 @@ import styles from './PriceList.module.scss'
 const DESKTOP_QUERY = '(min-width: 56rem)'
 
 function parseSort(value: string | null): PriceSort {
-  if (value === 'name' || value === 'price-asc' || value === 'price-desc') {
+  if (value === 'price-asc' || value === 'price-desc') {
     return value
   }
 
@@ -63,14 +66,39 @@ export function PriceList() {
   )
   const onlyInStock = searchParams.get('stock') === '1'
   const sort = parseSort(searchParams.get('sort'))
+  const searchQuery = searchParams.get('q') ?? ''
+  const searchTerm = searchQuery.trim()
+  const isSearching = searchTerm.length > 0
+  const matchedSearchResults = isSearching
+    ? searchCategories(priceCategories, searchTerm)
+    : []
+  const searchResults = onlyInStock
+    ? matchedSearchResults.filter(
+        (category) => getCategorySummary(category).inStock > 0,
+      )
+    : matchedSearchResults
+  const searchCount = searchResults.reduce((total, category) => {
+    const summary = getCategorySummary(category)
+
+    return total + (onlyInStock ? summary.inStock : summary.total)
+  }, 0)
   const activeSummary = getCategorySummary(activeCategory)
   const liveCount = onlyInStock ? activeSummary.inStock : activeSummary.total
-  const liveMessage = `Категория: ${activeCategory.title}. ${liveCount} ${pluralRu(
-    liveCount,
-    'сорт',
-    'сорта',
-    'сортов',
-  )}${onlyInStock ? ' в наличии' : ''}.`
+  const liveMessage = isSearching
+    ? searchCount > 0
+      ? `Поиск: ${searchTerm}. Найдено ${searchCount} ${pluralRu(
+          searchCount,
+          'сорт',
+          'сорта',
+          'сортов',
+        )}.`
+      : `Поиск: ${searchTerm}. Ничего не найдено.`
+    : `Категория: ${activeCategory.title}. ${liveCount} ${pluralRu(
+        liveCount,
+        'сорт',
+        'сорта',
+        'сортов',
+      )}${onlyInStock ? ' в наличии' : ''}.`
 
   useEffect(() => {
     const categoryParam = searchParams.get('category')
@@ -170,6 +198,10 @@ export function PriceList() {
     handleStockChange(false)
   }
 
+  const handleSearchChange = (value: string) => {
+    updateParams({ q: value ? value : null }, true)
+  }
+
   const handleDownloadCsv = () => {
     const header = [
       'Категория',
@@ -201,8 +233,8 @@ export function PriceList() {
         <header className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Прайс-лист</h1>
           <p className={styles.lead}>
-            Прайс-лист осени 2026. Цены указаны за один саженец. Выберите категорию
-            — увидите весь список сортов и цены.
+            Прайс-лист осени 2026. Цены указаны за один саженец. Ищите по сорту,
+            группе или категории — или выберите категорию в списке.
           </p>
         </header>
 
@@ -211,36 +243,110 @@ export function PriceList() {
         </p>
 
         <div className={styles.toolbar}>
-          <label className={styles.stockToggle}>
+          <label className={styles.searchField}>
+            <Search aria-hidden strokeWidth={1.75} />
+            <span className={styles.srOnly}>
+              Поиск по сорту, группе или категории
+            </span>
             <input
-              type="checkbox"
-              checked={onlyInStock}
-              onChange={(event) => handleStockChange(event.target.checked)}
+              type="search"
+              value={searchQuery}
+              onChange={(event) => handleSearchChange(event.target.value)}
+              placeholder="Сорт, группа или категория"
+              autoComplete="off"
             />
-            <span>Только в наличии</span>
+            {searchQuery && (
+              <button
+                type="button"
+                className={styles.searchClear}
+                onClick={() => handleSearchChange('')}
+                aria-label="Очистить поиск"
+              >
+                <X aria-hidden strokeWidth={2} />
+              </button>
+            )}
           </label>
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.actionButton}
-              onClick={() => window.print()}
-            >
-              <Printer aria-hidden strokeWidth={1.75} />
-              Печать
-            </button>
-            <button
-              type="button"
-              className={styles.actionButton}
-              onClick={handleDownloadCsv}
-              aria-label="Скачать весь прайс в формате CSV"
-            >
-              <Download aria-hidden strokeWidth={1.75} />
-              Скачать CSV
-            </button>
+
+          <div className={styles.toolbarRow}>
+            <label className={styles.stockToggle}>
+              <input
+                type="checkbox"
+                checked={onlyInStock}
+                onChange={(event) => handleStockChange(event.target.checked)}
+              />
+              <span>Только в наличии</span>
+            </label>
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={styles.actionButton}
+                onClick={() => window.print()}
+              >
+                <Printer aria-hidden strokeWidth={1.75} />
+                Печать
+              </button>
+              <button
+                type="button"
+                className={styles.actionButton}
+                onClick={handleDownloadCsv}
+                aria-label="Скачать весь прайс в формате CSV"
+              >
+                <Download aria-hidden strokeWidth={1.75} />
+                Скачать CSV
+              </button>
+            </div>
           </div>
         </div>
 
-        {isDesktop ? (
+        {isSearching ? (
+          <div className={styles.searchResults}>
+            {searchResults.length > 0 ? (
+              <div className={styles.searchList}>
+                {searchResults.map((category) => (
+                  <PriceTable
+                    key={category.id}
+                    category={category}
+                    onlyInStock={onlyInStock}
+                    sort={sort}
+                    onSortChange={handleSortChange}
+                    onResetStock={handleResetStock}
+                    idPrefix={`search-${category.id}`}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.searchEmpty}>
+                {onlyInStock && matchedSearchResults.length > 0 ? (
+                  <>
+                    <p>В найденных категориях нет сортов в наличии.</p>
+                    <button
+                      type="button"
+                      className={styles.resetSearchButton}
+                      onClick={handleResetStock}
+                    >
+                      Показать все сорта
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p>По запросу «{searchTerm}» ничего не найдено.</p>
+                    <p>
+                      Попробуйте изменить запрос — ищем по сорту, группе и
+                      категории.
+                    </p>
+                    <button
+                      type="button"
+                      className={styles.resetSearchButton}
+                      onClick={() => handleSearchChange('')}
+                    >
+                      Сбросить поиск
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        ) : isDesktop ? (
           <div className={styles.layout}>
             <PriceCategoryNav
               categories={priceCategories}

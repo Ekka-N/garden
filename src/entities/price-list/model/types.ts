@@ -1,4 +1,4 @@
-export type PriceSort = 'default' | 'name' | 'price-asc' | 'price-desc'
+export type PriceSort = 'default' | 'price-asc' | 'price-desc'
 
 export interface PriceRow {
   id: string

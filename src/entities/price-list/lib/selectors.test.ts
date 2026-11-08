@@ -5,6 +5,7 @@ import {
   getCategorySummary,
   getVisibleGroups,
   getVisibleRows,
+  searchCategories,
   sortRows,
 } from './selectors'
 
@@ -92,14 +93,6 @@ describe('filterRows', () => {
 })
 
 describe('sortRows', () => {
-  it('сортирует по названию с русской коллацией', () => {
-    expect(sortRows(rows, 'name').map((row) => row.name)).toEqual([
-      'Абрикос',
-      'Груша',
-      'Яблоко',
-    ])
-  })
-
   it('сортирует по возрастанию цены и оставляет проданные в конце', () => {
     expect(sortRows(rows, 'price-asc').map((row) => row.price)).toEqual([
       300,
@@ -119,7 +112,7 @@ describe('sortRows', () => {
   it('не меняет исходный массив', () => {
     const original = rows.map((row) => row.id)
 
-    sortRows(rows, 'name')
+    sortRows(rows, 'price-desc')
 
     expect(rows.map((row) => row.id)).toEqual(original)
   })
@@ -168,5 +161,94 @@ describe('getVisibleGroups', () => {
 
     expect(groups.map((group) => group.id)).toEqual(['first', 'second'])
     expect(groups[0].rows.map((row) => row.id)).toEqual(['one', 'two'])
+  })
+})
+
+describe('searchCategories', () => {
+  const searchData: PriceCategory[] = [
+    {
+      id: 'berries',
+      title: 'Ягоды',
+      updatedAt: '2026-01-01',
+      rows: [],
+      groups: [
+        {
+          id: 'blackberries',
+          title: 'Ежевика',
+          rows: [
+            { id: 'b1', name: 'Лох Тей', price: 300 },
+            { id: 'b2', name: 'Торнфри', price: null },
+          ],
+        },
+        {
+          id: 'raspberries',
+          title: 'Малина',
+          rows: [{ id: 'r1', name: 'Гусар', price: 200 }],
+        },
+      ],
+    },
+    {
+      id: 'apples',
+      title: 'Яблони',
+      updatedAt: '2026-01-01',
+      rows: [
+        { id: 'a1', name: 'Антоновка', price: 400 },
+        { id: 'a2', name: 'Чёрный принц', price: null },
+      ],
+    },
+  ]
+
+  it('находит категорию и возвращает все её строки', () => {
+    const result = searchCategories(searchData, 'Ягоды')
+
+    expect(result).toHaveLength(1)
+    expect(result[0].groups?.map((group) => group.id)).toEqual([
+      'blackberries',
+      'raspberries',
+    ])
+    expect(result[0].groups?.flatMap((group) => group.rows).length).toBe(3)
+  })
+
+  it('находит группу и возвращает все её строки', () => {
+    const result = searchCategories(searchData, 'ежевика')
+
+    expect(result).toHaveLength(1)
+    expect(result[0].groups).toHaveLength(1)
+    expect(result[0].groups?.[0].rows.map((row) => row.name)).toEqual([
+      'Лох Тей',
+      'Торнфри',
+    ])
+  })
+
+  it('находит сорт внутри группы', () => {
+    const result = searchCategories(searchData, 'Лох Тей')
+
+    expect(result).toHaveLength(1)
+    expect(result[0].groups).toHaveLength(1)
+    expect(result[0].groups?.[0].rows.map((row) => row.name)).toEqual(['Лох Тей'])
+  })
+
+  it('находит сорт в плоской категории и игнорирует ё и регистр', () => {
+    const result = searchCategories(searchData, 'черный ПРИНЦ')
+
+    expect(result).toHaveLength(1)
+    expect(result[0].id).toBe('apples')
+    expect(result[0].rows.map((row) => row.name)).toEqual(['Чёрный принц'])
+  })
+
+  it('сопоставляет несколько слов из разных уровней', () => {
+    const result = searchCategories(searchData, 'ягоды малина')
+
+    expect(result).toHaveLength(1)
+    expect(result[0].groups).toHaveLength(1)
+    expect(result[0].groups?.[0].id).toBe('raspberries')
+  })
+
+  it('возвращает пустой результат, если ничего не нашлось', () => {
+    expect(searchCategories(searchData, 'груша')).toEqual([])
+  })
+
+  it('возвращает исходный список для пустого запроса', () => {
+    expect(searchCategories(searchData, '   ')).toBe(searchData)
   })
 })
