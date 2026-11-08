@@ -34,15 +34,17 @@ function getAccordionSummary(category: PriceCategory, onlyInStock: boolean): str
 }
 
 function toCsvRow(category: PriceCategory, row: PriceRow, section: string): string[] {
+  const note = [row.description, row.note].filter(Boolean).join(' · ')
+
   return [
     category.title,
     section,
     row.name,
     row.ripening ?? '',
-    row.description ?? '',
+    note,
     row.isNew ? 'да' : '',
     row.price !== null ? String(row.price) : '',
-    row.price !== null ? 'в наличии' : 'продан',
+    row.price !== null ? 'в наличии' : 'нет в наличии',
   ]
 }
 
@@ -51,12 +53,14 @@ export function PriceList() {
   const isDesktop = useMediaQuery(DESKTOP_QUERY)
   const contentRef = useRef<HTMLDivElement>(null)
   const previousCategoryId = useRef<string | null>(null)
-  const [collapsedCategoryId, setCollapsedCategoryId] = useState<string | null>(null)
 
   const requestedCategoryId = searchParams.get('category')
   const activeCategory =
     priceCategories.find((category) => category.id === requestedCategoryId) ??
     priceCategories[0]
+  const [openCategoryId, setOpenCategoryId] = useState<string | null>(
+    activeCategory.id,
+  )
   const onlyInStock = searchParams.get('stock') === '1'
   const sort = parseSort(searchParams.get('sort'))
   const activeSummary = getCategorySummary(activeCategory)
@@ -94,6 +98,10 @@ export function PriceList() {
   }, [searchParams, setSearchParams])
 
   useEffect(() => {
+    setOpenCategoryId(activeCategory.id)
+  }, [activeCategory.id, isDesktop])
+
+  useEffect(() => {
     if (previousCategoryId.current === null) {
       previousCategoryId.current = activeCategory.id
       return
@@ -104,7 +112,6 @@ export function PriceList() {
     }
 
     previousCategoryId.current = activeCategory.id
-    setCollapsedCategoryId(null)
     const node = contentRef.current
 
     if (!node || node.getBoundingClientRect().top >= 0) {
@@ -134,15 +141,20 @@ export function PriceList() {
   }
 
   const handleCategorySelect = (id: string) => {
-    if (!isDesktop && id === activeCategory.id) {
-      setCollapsedCategoryId((current) => (current === id ? null : id))
+    if (isDesktop) {
+      if (id !== activeCategory.id) {
+        updateParams({ category: id })
+      }
+
       return
     }
 
-    if (id === activeCategory.id && searchParams.get('category') === id) {
+    if (id === openCategoryId) {
+      setOpenCategoryId(null)
       return
     }
 
+    setOpenCategoryId(id)
     updateParams({ category: id })
   }
 
@@ -189,8 +201,8 @@ export function PriceList() {
         <header className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Прайс-лист</h1>
           <p className={styles.lead}>
-            Актуальные цены на саженцы. Выберите категорию — увидите весь список
-            сортов и цены. Цены указаны за один саженец.
+            Прайс-лист осени 2026. Цены указаны за один саженец. Выберите категорию
+            — увидите весь список сортов и цены.
           </p>
         </header>
 
@@ -249,9 +261,7 @@ export function PriceList() {
         ) : (
           <div className={styles.accordion}>
             {priceCategories.map((category) => {
-              const isActive = category.id === activeCategory.id
-              const isExpanded =
-                isActive && collapsedCategoryId !== category.id
+              const isExpanded = openCategoryId === category.id
 
               return (
                 <section key={category.id} className={styles.accordionItem}>
@@ -305,7 +315,8 @@ export function PriceList() {
       <div className={styles.printOnly}>
         <h1 className={styles.printTitle}>Прайс-лист</h1>
         <p className={styles.printLead}>
-          Цены указаны за один саженец. Наличие уточняйте у продавца.
+          Прайс-лист осени 2026. Цены указаны за один саженец. Наличие уточняйте
+          у продавца.
         </p>
         <div className={styles.printList}>
           {priceCategories.map((category) => (

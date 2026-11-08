@@ -1,0 +1,111 @@
+{
+  "id": "other",
+  "title": "Другие саженцы",
+  "updatedAt": "2026-09-01",
+  "groups": [
+    {
+      "id": "hawthorn",
+      "title": "Боярышник",
+      "rows": [
+        {
+          "name": "Злат Поярковой",
+          "price": 600,
+          "description": "жёлтый"
+        },
+        {
+          "name": "Китайский крупноплодный",
+          "price": 600,
+          "description": "красный"
+        },
+        {
+          "name": "Людмил",
+          "price": 600,
+          "description": "оранжевый"
+        },
+        {
+          "name": "Збигнев",
+          "price": 600,
+          "description": "красный"
+        },
+        {
+          "name": "Полупан",
+          "price": 700,
+          "description": "красный"
+        },
+        {
+          "name": "Мао-Мао",
+          "price": 700,
+          "description": "красный"
+        }
+      ]
+    },
+    {
+      "id": "rowan",
+      "title": "Рябина",
+      "rows": [
+        {
+          "name": "Гранатная",
+          "price": 500
+        },
+        {
+          "name": "Финская",
+          "price": 400
+        },
+        {
+          "name": "Невежинская",
+          "price": 500
+        },
+        {
+          "name": "Титан",
+          "price": 500
+        },
+        {
+          "name": "Арония (черноплодная)",
+          "price": 400,
+          "description": "контейнер"
+        }
+      ]
+    },
+    {
+      "id": "sea-buckthorn",
+      "title": "Облепиха",
+      "rows": [
+        {
+          "name": "Огниво",
+          "price": 500,
+          "description": "ОКС"
+        },
+        {
+          "name": "Клавдия",
+          "price": 500,
+          "description": "ОКС"
+        },
+        {
+          "name": "Аурелия",
+          "price": 500,
+          "description": "ОКС"
+        },
+        {
+          "name": "Августина",
+          "price": 600,
+          "description": "контейнер"
+        },
+        {
+          "name": "Этна",
+          "price": 600,
+          "description": "контейнер"
+        },
+        {
+          "name": "Эссель",
+          "price": 600,
+          "description": "контейнер"
+        },
+        {
+          "name": "Гном (муж)",
+          "price": 500,
+          "description": "ОКС"
+        }
+      ]
+    }
+  ]
+}

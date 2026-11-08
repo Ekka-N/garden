@@ -1,0 +1,41 @@
+{
+  "id": "nuts",
+  "title": "Орехи",
+  "updatedAt": "2026-09-01",
+  "groups": [
+    {
+      "id": "hazelnuts",
+      "title": "Фундук",
+      "rows": [
+        {
+          "name": "Лозовской",
+          "price": 600,
+          "ripening": "август",
+          "description": "овальный"
+        },
+        {
+          "name": "Серебристый",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "шаровидный"
+        },
+        {
+          "name": "Шедевр",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "удлинённый"
+        }
+      ]
+    },
+    {
+      "id": "almond",
+      "title": "Декоративный миндаль (луизеания)",
+      "rows": [
+        {
+          "name": "Танюша",
+          "price": 600
+        }
+      ]
+    }
+  ]
+}

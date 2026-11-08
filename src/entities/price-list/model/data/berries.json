@@ -1,0 +1,148 @@
+{
+  "id": "berries",
+  "title": "Ягоды",
+  "updatedAt": "2026-09-01",
+  "groups": [
+    {
+      "id": "blackberries",
+      "title": "Ежевика",
+      "rows": [
+        {
+          "name": "Лох Тей",
+          "price": 300,
+          "ripening": "июль",
+          "description": "2-летний куст",
+          "note": "без шипов"
+        },
+        {
+          "name": "Небеса могут подождать",
+          "price": 300,
+          "ripening": "август",
+          "description": "2-летний куст",
+          "note": "без шипов"
+        },
+        {
+          "name": "Прайм Арк Фридом",
+          "price": 350,
+          "ripening": "ремонтантная",
+          "description": "2-летний куст",
+          "note": "без шипов"
+        },
+        {
+          "name": "Блек Джем",
+          "price": 700,
+          "ripening": "ремонтантная",
+          "description": "2-летний куст",
+          "note": "без шипов"
+        }
+      ]
+    },
+    {
+      "id": "raspberries",
+      "title": "Малина",
+      "rows": [
+        {
+          "name": "Арбат",
+          "price": 150,
+          "ripening": "июнь–июль",
+          "description": "красная",
+          "note": "без шипов"
+        },
+        {
+          "name": "Пшехиба",
+          "price": null,
+          "ripening": "июнь–июль",
+          "description": "красная"
+        },
+        {
+          "name": "Брянское диво",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        },
+        {
+          "name": "Джоан Джей",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        },
+        {
+          "name": "Кванза",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        },
+        {
+          "name": "Квели",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        },
+        {
+          "name": "Амира",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        },
+        {
+          "name": "Маричка",
+          "price": null,
+          "ripening": "ремонтантная",
+          "description": "красная"
+        }
+      ]
+    },
+    {
+      "id": "strawberries",
+      "title": "Садовая земляника (клубника)",
+      "rows": [
+        {
+          "name": "Альба",
+          "price": 60,
+          "ripening": "одноразовая",
+          "description": "конец мая"
+        },
+        {
+          "name": "Клери",
+          "price": 60,
+          "ripening": "одноразовая",
+          "description": "конец мая"
+        },
+        {
+          "name": "Соната",
+          "price": 60,
+          "ripening": "одноразовая",
+          "description": "конец мая"
+        },
+        {
+          "name": "Мурано",
+          "price": 100,
+          "ripening": "нейтрального светового дня"
+        },
+        {
+          "name": "Маригет",
+          "price": 100,
+          "ripening": "нейтрального светового дня"
+        }
+      ]
+    },
+    {
+      "id": "gooseberries",
+      "title": "Крыжовник",
+      "rows": [
+        {
+          "name": "Донецкий первенец",
+          "price": 300,
+          "ripening": "конец июня",
+          "description": "светло-зелёный"
+        },
+        {
+          "name": "Донецк. крупноплодный",
+          "price": null,
+          "ripening": "середина — конец июля",
+          "description": "зелёный"
+        }
+      ]
+    }
+  ]
+}

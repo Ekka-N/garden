@@ -6,7 +6,10 @@ export interface PriceRow {
   ripening?: string
   /** Порядковый номер срока созревания для сортировки, если нужен ручной порядок */
   ripeningOrder?: number
+  /** Характеристика плода: цвет, форма, размер */
   description?: string
+  /** Дополнительная отметка: подвой, самоплодность, контейнер */
+  note?: string
   isNew?: boolean
   price: number | null
 }

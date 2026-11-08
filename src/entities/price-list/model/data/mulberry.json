@@ -1,0 +1,17 @@
+{
+  "id": "mulberry",
+  "title": "Шелковица",
+  "updatedAt": "2026-09-01",
+  "rows": [
+    {
+      "name": "Артёмовская",
+      "price": 600,
+      "description": "чёрная"
+    },
+    {
+      "name": "Белый медовый",
+      "price": null,
+      "description": "белая"
+    }
+  ]
+}

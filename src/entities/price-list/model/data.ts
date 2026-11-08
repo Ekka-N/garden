@@ -1,453 +1,63 @@
-import type { PriceCategory } from './types'
+import type { PriceCategory, PriceGroup, PriceRow } from './types'
+import apples from './data/apples.json'
+import apricots from './data/apricots.json'
+import berries from './data/berries.json'
+import cherries from './data/cherries.json'
+import decor from './data/decor.json'
+import grapes from './data/grapes.json'
+import mulberry from './data/mulberry.json'
+import nuts from './data/nuts.json'
+import other from './data/other.json'
+import pears from './data/pears.json'
+import plums from './data/plums.json'
+import quince from './data/quince.json'
+import roses from './data/roses.json'
+
+type RawRow = Omit<PriceRow, 'id'>
+type RawGroup = Omit<PriceGroup, 'rows'> & { rows: RawRow[] }
+type RawCategory = Omit<PriceCategory, 'rows' | 'groups'> & {
+  rows?: RawRow[]
+  groups?: RawGroup[]
+}
+
+/** Проставляет стабильные id строкам и собирает категорию из JSON-файла. */
+function withIds(raw: RawCategory): PriceCategory {
+  let rowIndex = 0
+
+  const attachIds = (rows: RawRow[]): PriceRow[] =>
+    rows.map((row) => {
+      rowIndex += 1
+
+      return { ...row, id: `${raw.id}-${rowIndex}` }
+    })
+
+  const groups = raw.groups?.map((group) => ({
+    ...group,
+    rows: attachIds(group.rows),
+  }))
+
+  return {
+    id: raw.id,
+    title: raw.title,
+    ...(raw.shortTitle ? { shortTitle: raw.shortTitle } : {}),
+    updatedAt: raw.updatedAt,
+    rows: raw.rows ? attachIds(raw.rows) : [],
+    ...(groups ? { groups } : {}),
+  }
+}
 
 export const priceCategories: PriceCategory[] = [
-  {
-    id: 'stone-fruits',
-    title: 'Абрикосы и персики',
-    updatedAt: '2026-10-01',
-    rows: [],
-    groups: [
-      {
-        id: 'apricots',
-        title: 'Абрикосы',
-        rows: [
-          {
-            id: 'adriana',
-            name: 'Адриана',
-            ripening: 'конец июля',
-            description: 'самоплодный',
-            price: 600,
-          },
-          {
-            id: 'vanila-kot',
-            name: 'Ванила кот',
-            ripening: 'середина июля',
-            description: 'с румянцем',
-            isNew: true,
-            price: 600,
-          },
-          {
-            id: 'krasnoshchekiy',
-            name: 'Краснощекий',
-            ripening: '20–30 июля',
-            price: 500,
-          },
-          {
-            id: 'manitoba',
-            name: 'Манитоба',
-            ripening: 'начало июля',
-            description: 'канадский сорт',
-            price: 500,
-          },
-          {
-            id: 'nelson',
-            name: 'Нельсон',
-            ripening: 'начало августа',
-            price: null,
-          },
-          {
-            id: 'khani-rich',
-            name: 'Хани Рич',
-            description: 'априум (слива + абрикос)',
-            price: 600,
-          },
-        ],
-      },
-      {
-        id: 'peaches',
-        title: 'Персики',
-        rows: [
-          {
-            id: 'redhaven',
-            name: 'Редхейвен',
-            ripening: 'середина июля',
-            description: 'крупноплодный',
-            price: 550,
-          },
-          {
-            id: 'kievskiy-ranniy',
-            name: 'Киевский ранний',
-            ripening: 'начало июля',
-            price: 500,
-          },
-          {
-            id: 'veteran',
-            name: 'Ветеран',
-            ripening: 'начало августа',
-            description: 'морозостойкий',
-            price: null,
-          },
-          {
-            id: 'sochny',
-            name: 'Сочный',
-            ripening: 'конец августа',
-            isNew: true,
-            price: 550,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'apples',
-    title: 'Яблоки',
-    updatedAt: '2026-11-01',
-    rows: [
-      {
-        id: 'antonovka',
-        name: 'Антоновка',
-        ripening: 'сентябрь',
-        description: 'классический осенний сорт',
-        price: 400,
-      },
-      {
-        id: 'belyi-naliv',
-        name: 'Белый налив',
-        ripening: 'июль',
-        description: 'ранний сорт',
-        price: 400,
-      },
-      {
-        id: 'melba',
-        name: 'Мельба',
-        ripening: 'конец августа',
-        description: 'крупные плоды',
-        price: 450,
-      },
-      {
-        id: 'slava-pobeditelyam',
-        name: 'Слава победителям',
-        ripening: 'конец августа',
-        price: 450,
-      },
-      {
-        id: 'orlik',
-        name: 'Орлик',
-        ripening: 'сентябрь',
-        description: 'зимний сорт',
-        price: 500,
-      },
-      {
-        id: 'lobo',
-        name: 'Лобо',
-        ripening: 'конец сентября',
-        price: 500,
-      },
-      {
-        id: 'spartan',
-        name: 'Спартан',
-        ripening: 'конец сентября',
-        description: 'зимний сорт',
-        price: 550,
-      },
-      {
-        id: 'golden-delishes',
-        name: 'Голден Делишес',
-        ripening: 'конец сентября',
-        isNew: true,
-        price: 550,
-      },
-      {
-        id: 'shtriem',
-        name: 'Штрифель',
-        ripening: 'октябрь',
-        price: null,
-      },
-    ],
-  },
-  {
-    id: 'pears',
-    title: 'Груши',
-    updatedAt: '2026-11-01',
-    rows: [
-      {
-        id: 'chizhovskaya',
-        name: 'Чижовская',
-        ripening: 'конец августа',
-        description: 'самоплодная',
-        price: 550,
-      },
-      {
-        id: 'lada',
-        name: 'Лада',
-        ripening: 'август',
-        description: 'скороплодная',
-        price: 500,
-      },
-      {
-        id: 'severyanka',
-        name: 'Северянка',
-        ripening: 'август',
-        description: 'морозостойкая',
-        price: 500,
-      },
-      {
-        id: 'dushes',
-        name: 'Дюшес',
-        ripening: 'сентябрь',
-        description: 'десертный вкус',
-        price: 600,
-      },
-      {
-        id: 'konferentsiya',
-        name: 'Конференция',
-        ripening: 'сентябрь',
-        price: 650,
-      },
-      {
-        id: 'talgar-krasavitsa',
-        name: 'Талгарская красавица',
-        ripening: 'сентябрь',
-        isNew: true,
-        price: 600,
-      },
-    ],
-  },
-  {
-    id: 'plums',
-    title: 'Сливы',
-    updatedAt: '2026-10-15',
-    rows: [
-      {
-        id: 'vengerka-moskovskaya',
-        name: 'Венгерка московская',
-        ripening: 'конец августа',
-        price: 450,
-      },
-      {
-        id: 'stenley',
-        name: 'Стенли',
-        ripening: 'сентябрь',
-        description: 'крупные плоды',
-        price: 500,
-      },
-      {
-        id: 'renklod-kolkhozniy',
-        name: 'Ренклод колхозный',
-        ripening: 'август',
-        price: 450,
-      },
-      {
-        id: 'mirnaya',
-        name: 'Мирная',
-        ripening: 'начало августа',
-        price: 450,
-      },
-      {
-        id: 'zarechnaya-rannyaya',
-        name: 'Заречная ранняя',
-        ripening: 'июль',
-        isNew: true,
-        price: 500,
-      },
-      {
-        id: 'tulskaya-chernaya',
-        name: 'Тульская черная',
-        ripening: 'конец августа',
-        price: null,
-      },
-    ],
-  },
-  {
-    id: 'cherries',
-    title: 'Вишня и черешня',
-    updatedAt: '2026-10-15',
-    rows: [],
-    groups: [
-      {
-        id: 'sour-cherries',
-        title: 'Вишня',
-        rows: [
-          {
-            id: 'vladimirskaya',
-            name: 'Владимирская',
-            ripening: 'конец июля',
-            price: 500,
-          },
-          {
-            id: 'turgenevka',
-            name: 'Тургеневка',
-            ripening: 'конец июля',
-            description: 'крупноплодная',
-            price: 550,
-          },
-          {
-            id: 'molodezhnaya',
-            name: 'Молодежная',
-            ripening: 'начало июля',
-            price: 500,
-          },
-          {
-            id: 'shokoladnitsa',
-            name: 'Шоколадница',
-            ripening: 'начало июля',
-            price: 550,
-          },
-        ],
-      },
-      {
-        id: 'sweet-cherries',
-        title: 'Черешня',
-        rows: [
-          {
-            id: 'iput',
-            name: 'Ипуть',
-            ripening: 'начало июля',
-            description: 'морозостойкая',
-            price: 650,
-          },
-          {
-            id: 'revna',
-            name: 'Ревна',
-            ripening: 'конец июля',
-            price: 650,
-          },
-          {
-            id: 'tyutchevka',
-            name: 'Тютчевка',
-            ripening: 'конец июля',
-            price: 600,
-          },
-          {
-            id: 'bryanskaya-rozovaya',
-            name: 'Брянская розовая',
-            ripening: 'начало августа',
-            isNew: true,
-            price: 600,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'grapes',
-    title: 'Виноград',
-    updatedAt: '2026-10-15',
-    rows: [
-      {
-        id: 'kishmish',
-        name: 'Кишмиш',
-        ripening: 'август',
-        description: 'без косточек',
-        price: 700,
-      },
-      {
-        id: 'lidiya',
-        name: 'Лидия',
-        ripening: 'сентябрь',
-        description: 'универсальный сорт',
-        price: 600,
-      },
-      {
-        id: 'izabella',
-        name: 'Изабелла',
-        ripening: 'сентябрь',
-        price: 550,
-      },
-      {
-        id: 'avgustin',
-        name: 'Августин',
-        ripening: 'август',
-        description: 'крупные грозди',
-        price: 650,
-      },
-      {
-        id: 'moldova',
-        name: 'Молдова',
-        ripening: 'сентябрь',
-        price: 600,
-      },
-      {
-        id: 'aleshenkin',
-        name: 'Алешенькин',
-        ripening: 'август',
-        isNew: true,
-        price: 550,
-      },
-    ],
-  },
-  {
-    id: 'berries',
-    title: 'Ягодные культуры',
-    updatedAt: '2026-11-01',
-    rows: [],
-    groups: [
-      {
-        id: 'currants',
-        title: 'Смородина',
-        rows: [
-          {
-            id: 'chernaya-zhemchuzhina',
-            name: 'Черная жемчужина',
-            ripening: 'июль',
-            description: 'крупные ягоды',
-            price: 350,
-          },
-          {
-            id: 'selechenskaya',
-            name: 'Селеченская',
-            ripening: 'июль',
-            price: 350,
-          },
-          {
-            id: 'krasnaya-gollandskaya',
-            name: 'Красная голландская',
-            ripening: 'июль',
-            price: 300,
-          },
-        ],
-      },
-      {
-        id: 'gooseberries',
-        title: 'Крыжовник',
-        rows: [
-          {
-            id: 'russkiy',
-            name: 'Русский',
-            ripening: 'июль',
-            description: 'без шипов',
-            price: 350,
-          },
-          {
-            id: 'grushenka',
-            name: 'Грушенька',
-            ripening: 'июль',
-            price: 350,
-          },
-          {
-            id: 'chernoslivovyi',
-            name: 'Черносливовый',
-            ripening: 'август',
-            price: 300,
-          },
-        ],
-      },
-      {
-        id: 'raspberries',
-        title: 'Малина',
-        rows: [
-          {
-            id: 'gusar',
-            name: 'Гусар',
-            ripening: 'июль',
-            price: 300,
-          },
-          {
-            id: 'patritsiya',
-            name: 'Патриция',
-            ripening: 'июль',
-            description: 'крупноплодная',
-            price: 350,
-          },
-          {
-            id: 'remontantnaya',
-            name: 'Ремонтантная',
-            ripening: 'август–сентябрь',
-            isNew: true,
-            price: 400,
-          },
-        ],
-      },
-    ],
-  },
+  withIds(cherries),
+  withIds(apricots),
+  withIds(apples),
+  withIds(pears),
+  withIds(plums),
+  withIds(berries),
+  withIds(quince),
+  withIds(nuts),
+  withIds(mulberry),
+  withIds(decor),
+  withIds(grapes),
+  withIds(roses),
+  withIds(other),
 ]

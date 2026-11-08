@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import type { PriceCategory, PriceSort } from '@/entities/price-list/model/types'
 import {
+  getAllRows,
   getCategorySummary,
   getVisibleGroups,
   getVisibleRows,
@@ -55,6 +56,8 @@ export function PriceTable({
     ? visibleGroups.flatMap((group) => group.rows)
     : getVisibleRows(category, { onlyInStock, sort })
   const isEmpty = visibleRows.length === 0
+  const hasRipening = getAllRows(category).some((row) => Boolean(row.ripening))
+  const columnCount = hasRipening ? 4 : 3
 
   const metaParts = [
     `Обновлено ${formatDate(category.updatedAt)}`,
@@ -174,7 +177,7 @@ export function PriceTable({
                     </button>
                   )}
                 </th>
-                <th scope="col">Срок созревания</th>
+                {hasRipening && <th scope="col">Срок созревания</th>}
                 <th scope="col">Примечание</th>
                 <th scope="col" className={styles.priceHead} aria-sort={priceAriaSort}>
                   {printMode ? (
@@ -197,16 +200,26 @@ export function PriceTable({
                 ? visibleGroups.map((group) => (
                     <Fragment key={group.id}>
                       <tr className={styles.groupRow}>
-                        <th scope="colgroup" colSpan={4}>
+                        <th scope="colgroup" colSpan={columnCount}>
                           {group.title}
                         </th>
                       </tr>
                       {group.rows.map((row) => (
-                        <PriceTableRow key={row.id} row={row} />
+                        <PriceTableRow
+                          key={row.id}
+                          row={row}
+                          hasRipening={hasRipening}
+                        />
                       ))}
                     </Fragment>
                   ))
-                : visibleRows.map((row) => <PriceTableRow key={row.id} row={row} />)}
+                : visibleRows.map((row) => (
+                    <PriceTableRow
+                      key={row.id}
+                      row={row}
+                      hasRipening={hasRipening}
+                    />
+                  ))}
             </tbody>
           </table>
         </div>
@@ -217,22 +230,28 @@ export function PriceTable({
 
 function PriceTableRow({
   row,
+  hasRipening,
 }: {
   row: PriceCategory['rows'][number]
+  hasRipening: boolean
 }) {
+  const note = [row.description, row.note].filter(Boolean).join(' · ')
+
   return (
     <tr className={row.price === null ? styles.soldOut : undefined}>
       <td data-label="Сорт">
         <span className={styles.name}>{row.name}</span>
         {row.isNew && <span className={styles.badge}>Новинка</span>}
       </td>
-      <td data-label="Срок созревания">{row.ripening ?? '—'}</td>
-      <td data-label="Примечание">{row.description ?? '—'}</td>
+      {hasRipening && (
+        <td data-label="Срок созревания">{row.ripening ?? '—'}</td>
+      )}
+      <td data-label="Примечание">{note || '—'}</td>
       <td data-label="Цена" className={styles.priceCell}>
         {row.price !== null ? (
           `${formatPrice(row.price)} руб.`
         ) : (
-          <span className={styles.soldOutLabel}>Продан</span>
+          <span className={styles.soldOutLabel}>Нет в наличии</span>
         )}
       </td>
     </tr>

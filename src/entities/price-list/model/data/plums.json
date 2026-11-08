@@ -1,0 +1,201 @@
+{
+  "id": "plums",
+  "title": "Слива и алыча",
+  "updatedAt": "2026-09-01",
+  "groups": [
+    {
+      "id": "plums",
+      "title": "Слива",
+      "rows": [
+        {
+          "name": "Анна Шпет",
+          "price": 600,
+          "ripening": "конец сентября",
+          "description": "синяя"
+        },
+        {
+          "name": "Афаска жёлтая",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "жёлтая"
+        },
+        {
+          "name": "Венгерка донецкая",
+          "price": 600,
+          "ripening": "август",
+          "description": "синяя"
+        },
+        {
+          "name": "Калипсо",
+          "price": 600,
+          "ripening": "июль",
+          "description": "синяя"
+        },
+        {
+          "name": "Конквест (без семечка)",
+          "price": 600,
+          "ripening": "конец августа",
+          "description": "синяя"
+        },
+        {
+          "name": "Ренклод ранний",
+          "price": 600,
+          "ripening": "конец июля",
+          "description": "янтарная"
+        },
+        {
+          "name": "Киргизская превосходная",
+          "price": 600,
+          "ripening": "середина августа",
+          "description": "фиолетовая с налётом"
+        },
+        {
+          "name": "Стенлей",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "тёмно-синяя"
+        },
+        {
+          "name": "Фаворитка султана",
+          "price": 600,
+          "ripening": "начало сентября",
+          "description": "фиолетовая"
+        },
+        {
+          "name": "Топ Хит",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "синяя",
+          "note": "самоплодная"
+        },
+        {
+          "name": "Ханита",
+          "price": 600,
+          "ripening": "конец августа",
+          "description": "синяя",
+          "note": "самоплодная, дерево слаборослое"
+        },
+        {
+          "name": "Эмпрессо",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "тёмно-синяя"
+        }
+      ]
+    },
+    {
+      "id": "russian-plums",
+      "title": "Слива русская (алыча)",
+      "rows": [
+        {
+          "name": "Генерал",
+          "price": 600,
+          "ripening": "июль",
+          "description": "красная"
+        },
+        {
+          "name": "Обильная жёлтая",
+          "price": 600,
+          "ripening": "конец июля",
+          "description": "жёлтая"
+        },
+        {
+          "name": "Обильная",
+          "price": 600,
+          "ripening": "конец июля",
+          "description": "синяя"
+        },
+        {
+          "name": "Колонновидная",
+          "price": 600,
+          "ripening": "август",
+          "description": "красновато-синяя"
+        }
+      ]
+    },
+    {
+      "id": "hybrid-plums",
+      "title": "Диплоидная слива (гибриды)",
+      "rows": [
+        {
+          "name": "Анжелина",
+          "price": 600,
+          "ripening": "октябрь",
+          "description": "чёрно-синяя"
+        },
+        {
+          "name": "Аутумн гигант",
+          "price": 600,
+          "ripening": "октябрь",
+          "description": "розово-сизая"
+        },
+        {
+          "name": "Байрон голд",
+          "price": 600,
+          "ripening": "сентябрь",
+          "description": "жёлтая"
+        },
+        {
+          "name": "Бербанк гигант",
+          "price": 600,
+          "ripening": "начало августа",
+          "description": "чёрный"
+        },
+        {
+          "name": "Голубая кармен",
+          "price": 600,
+          "ripening": "июль",
+          "description": "тёмно-фиолетовая"
+        },
+        {
+          "name": "Дофисандра",
+          "price": 600,
+          "ripening": "июль",
+          "description": "тёмно-синий"
+        },
+        {
+          "name": "Дабл данди",
+          "price": 800
+        },
+        {
+          "name": "Мун глоб",
+          "price": 600,
+          "ripening": "конец июля",
+          "description": "жёлтый с румянцем"
+        },
+        {
+          "name": "Флевор квин",
+          "price": 600,
+          "ripening": "август–сентябрь",
+          "description": "зелёный"
+        },
+        {
+          "name": "Ойши Васе",
+          "price": 600
+        },
+        {
+          "name": "Санта роза",
+          "price": 600
+        },
+        {
+          "name": "То-че-сан",
+          "price": 700,
+          "ripening": "начало сентября",
+          "description": "жёлтые"
+        },
+        {
+          "name": "Черрикос",
+          "price": 600,
+          "ripening": "август",
+          "description": "тёмно-красный"
+        },
+        {
+          "name": "Шарафуга (нектакотум)",
+          "price": 700,
+          "ripening": "июль",
+          "description": "жёлтые"
+        }
+      ]
+    }
+  ]
+}
