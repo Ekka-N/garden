@@ -5,25 +5,29 @@ export interface Venue {
   zoom: number
 }
 
-// Плейсхолдер: заменить на реальные данные пункта выдачи.
-export const VENUE: Venue = {
-  address: 'Московская область, г. Солнечногорск, ул. Садовая, 1',
+export const VENUE = {
+  /** Широта (WGS-84) */
+  lat: 48.300136,
+  /** Долгота */
+  lon: 40.149732,
+  zoom: 15,
+  address: "д. Поповка, Садовая ул., 8",
+  /** Подсказки для гостей (можно править без кода компонента) */
   directions: [
-    'На автомобиле: по Ленинградскому шоссе до Солнечногорска, далее по указателям.',
-    'На общественном транспорте: автобусом до остановки «Садовая».',
+    "С трассы сверните по указателю на Поповку.",
+    "Парковка у ворот с табличкой «Саженцы».",
   ],
-  coords: { lat: 56.1851, lon: 36.9776 },
-  zoom: 14,
-}
+} as const;
 
+/** URL встраиваемого виджета карты */
 export function getYandexMapWidgetSrc(): string {
-  const { lat, lon } = VENUE.coords
-  const point = `${lon},${lat}`
-  return `https://yandex.ru/map-widget/v1/?ll=${point}&z=${VENUE.zoom}&pt=${point}`
+  const { lat, lon, zoom } = VENUE;
+  const pt = `${VENUE.lon},${VENUE.lat}~pm2rdm`;
+  return `https://yandex.ru/map-widget/v1/?ll=${lon}%2C${lat}&z=${zoom}&l=map&pt=${encodeURIComponent(pt)}`;
 }
 
+/** Ссылка «открыть в Яндекс.Картах» (центр на точке) */
 export function getYandexMapsPointUrl(): string {
-  const { lat, lon } = VENUE.coords
-  const point = `${lon},${lat}`
-  return `https://yandex.ru/maps/?ll=${point}&z=${VENUE.zoom}&pt=${point}`
+  const { lat, lon, zoom } = VENUE;
+  return `https://yandex.ru/maps/?pt=${lon}%2C${lat}&z=${zoom}&l=map`;
 }

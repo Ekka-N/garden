@@ -1,10 +1,16 @@
 export interface PriceRow {
   id: string
   name: string
-  age: string
-  height: string
-  price: number
-  unit: 'шт' | 'саженец'
+  ripening?: string
+  description?: string
+  isNew?: boolean
+  price: number | null
+}
+
+export interface PriceGroup {
+  id: string
+  title: string
+  rows: PriceRow[]
 }
 
 export interface PriceTable {
@@ -12,4 +18,5 @@ export interface PriceTable {
   title: string
   updatedAt: string
   rows: PriceRow[]
+  groups?: PriceGroup[]
 }
