@@ -13,9 +13,36 @@ import styles from './Contacts.module.scss'
 
 type CopyField = 'email' | 'address'
 
+const CONTACTS_CLOSED_KEY = 'sad-nikishin-contacts-closed'
+
 const ADDRESS_TEXT = [
   ...NURSERY.address.lines,
+  NURSERY.address.note,
 ].join(', ')
+
+function readContactsClosed(): boolean {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  try {
+    return window.localStorage.getItem(CONTACTS_CLOSED_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+function writeContactsClosed(closed: boolean) {
+  try {
+    if (closed) {
+      window.localStorage.setItem(CONTACTS_CLOSED_KEY, '1')
+    } else {
+      window.localStorage.removeItem(CONTACTS_CLOSED_KEY)
+    }
+  } catch {
+    // localStorage может быть недоступен — панель просто не запомнит состояние.
+  }
+}
 
 async function copyText(text: string): Promise<boolean> {
   try {
@@ -48,7 +75,7 @@ async function copyText(text: string): Promise<boolean> {
 }
 
 export function Contacts() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(() => !readContactsClosed())
   const [copied, setCopied] = useState<CopyField | null>(null)
   const [copyError, setCopyError] = useState<CopyField | null>(null)
   const timeoutRef = useRef<number | null>(null)
@@ -61,6 +88,10 @@ export function Contacts() {
     }
 
     wasOpenRef.current = isOpen
+  }, [isOpen])
+
+  useEffect(() => {
+    writeContactsClosed(!isOpen)
   }, [isOpen])
 
   useEffect(() => {
@@ -116,6 +147,14 @@ export function Contacts() {
     return 'Копировать'
   }
 
+  const closeContacts = () => {
+    setIsOpen(false)
+  }
+
+  const openContacts = () => {
+    setIsOpen(true)
+  }
+
   const statusMessage =
     copied === 'email'
       ? 'Email скопирован.'
@@ -142,7 +181,7 @@ export function Contacts() {
             <button
               type="button"
               className={styles.toggle}
-              onClick={() => setIsOpen(false)}
+              onClick={closeContacts}
               aria-label="Свернуть контакты"
               aria-expanded="true"
               aria-controls="contacts-panel"
@@ -243,7 +282,7 @@ export function Contacts() {
           ref={launcherRef}
           type="button"
           className={styles.launcher}
-          onClick={() => setIsOpen(true)}
+          onClick={openContacts}
           aria-expanded="false"
           aria-controls="contacts-panel"
         >
