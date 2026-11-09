@@ -19,6 +19,9 @@ export function PageLayout() {
           <NavLink to="/" end className={navLinkClassName}>
             Главная
           </NavLink>
+          <NavLink to="/recommendations" className={navLinkClassName}>
+            Рекомендации
+          </NavLink>
           <NavLink to="/price-list" className={navLinkClassName}>
             Прайс-лист
           </NavLink>
