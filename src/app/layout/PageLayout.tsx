@@ -1,5 +1,7 @@
 import { Sprout } from 'lucide-react'
 import { NavLink, Outlet } from 'react-router-dom'
+import { NURSERY } from '@/data/nursery'
+import { Contacts } from '@/widgets/contacts/Contacts'
 import styles from './PageLayout.module.scss'
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
@@ -11,7 +13,7 @@ export function PageLayout() {
       <header className={styles.header}>
         <NavLink to="/" className={styles.brand} end>
           <Sprout aria-hidden strokeWidth={1.75} />
-          Питомник саженцев
+          {NURSERY.name}
         </NavLink>
         <nav className={styles.nav} aria-label="Основная навигация">
           <NavLink to="/" end className={navLinkClassName}>
@@ -26,8 +28,9 @@ export function PageLayout() {
         <Outlet />
       </main>
       <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} Питомник саженцев</p>
+        <p>© {new Date().getFullYear()} {NURSERY.name}</p>
       </footer>
+      <Contacts />
     </div>
   )
 }

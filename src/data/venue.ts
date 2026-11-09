@@ -1,3 +1,5 @@
+import { NURSERY } from './nursery'
+
 export interface Venue {
   address: string
   directions: string[]
@@ -11,12 +13,9 @@ export const VENUE = {
   /** Долгота */
   lon: 40.149732,
   zoom: 15,
-  address: "д. Поповка, Садовая ул., 8",
+  address: NURSERY.address.lines.join(', '),
   /** Подсказки для гостей (можно править без кода компонента) */
-  directions: [
-    "С трассы сверните по указателю на Поповку.",
-    "Парковка у ворот с табличкой «Саженцы».",
-  ],
+  directions: [`${NURSERY.address.note}.`],
 } as const;
 
 /** URL встраиваемого виджета карты */

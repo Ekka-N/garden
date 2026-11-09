@@ -1,0 +1,267 @@
+.root {
+  position: fixed;
+  right: clamp(0.75rem, 3vw, 1.5rem);
+  bottom: clamp(0.75rem, 3vw, 1.5rem);
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.root > * {
+  pointer-events: auto;
+}
+
+.panel {
+  width: min(22rem, calc(100vw - 1.5rem));
+  max-height: min(80vh, 42rem);
+  overflow: auto;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.9rem;
+  background-color: #ffffff;
+  box-shadow: 0 1rem 2.5rem rgba(34, 39, 31, 0.2);
+  scrollbar-width: thin;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #edf0ea;
+  background-color: #ffffff;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  background: none;
+  color: #4a6b3a;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background-color: #f2f6ee;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+.toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.body {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.phoneBlock {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.fieldLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #5b6354;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fieldIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #4a6b3a;
+}
+
+.phone {
+  color: #3f5f2f;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.phone:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.phone:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 3px;
+}
+
+.note {
+  margin: 0;
+  color: #5b6354;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.messengers {
+  margin: 0;
+  color: #3f5f2f;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #edf0ea;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #cbd3c4;
+  border-radius: 0.4rem;
+  background-color: #ffffff;
+  color: #3f5f2f;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.copyButton:hover {
+  border-color: #4a6b3a;
+  background-color: #f2f6ee;
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+.copyButton svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.email {
+  color: #22271f;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.email:hover {
+  color: #3f5f2f;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.email:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 2px;
+}
+
+.address {
+  display: grid;
+  gap: 0.1rem;
+  color: #3c4436;
+  font-size: 0.9rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.addressNote {
+  color: #5b6354;
+  font-size: 0.82rem;
+}
+
+.launcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background-color: #4a6b3a;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0.5rem 1.5rem rgba(34, 39, 31, 0.22);
+}
+
+.launcher:hover {
+  background-color: #3f5f2f;
+}
+
+.launcher:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 3px;
+}
+
+.launcher svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 30rem) {
+  .root {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .panel {
+    width: 100%;
+    max-height: 70vh;
+  }
+
+  .launcher {
+    margin-left: auto;
+  }
+}
+
+@media print {
+  .root {
+    display: none;
+  }
+}

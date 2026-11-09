@@ -1,0 +1,153 @@
+.hero {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid #d7ddd2;
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 100% 0, rgba(74, 107, 58, 0.12), transparent 45%),
+    linear-gradient(135deg, #f2f6ee, #ffffff 70%);
+}
+
+.heading {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: #4a6b3a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eyebrow svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  line-height: 1.15;
+}
+
+.lead {
+  max-width: 46rem;
+  margin: 0;
+  color: #4a5344;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.5;
+}
+
+.text {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 52rem;
+  color: #3c4436;
+  line-height: 1.6;
+}
+
+.text p {
+  margin: 0;
+}
+
+.order {
+  display: grid;
+  justify-items: start;
+  gap: 0.4rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #dfe6d8;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+}
+
+.orderTitle {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+}
+
+.phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #3f5f2f;
+  font-size: clamp(1.15rem, 3vw, 1.35rem);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.phone:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.phone:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 3px;
+}
+
+.phone svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.orderText {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: #3c4436;
+  line-height: 1.5;
+}
+
+.orderText svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: #4a6b3a;
+}
+
+.orderNote {
+  margin: 0;
+  color: #5b6354;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.55rem;
+  background-color: #4a6b3a;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primaryButton:hover {
+  background-color: #3f5f2f;
+}
+
+.primaryButton:focus-visible {
+  outline: 2px solid #3f5f2f;
+  outline-offset: 3px;
+}
+
+.primaryButton svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
