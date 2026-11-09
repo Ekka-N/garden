@@ -7,6 +7,7 @@ import { buildCsvRows } from '@/entities/price-list/lib/exportRows'
 import { downloadPriceListExcel } from '@/entities/price-list/lib/exportExcel'
 import {
   getCategorySummary,
+  getVisibleCategories,
   searchCategories,
 } from '@/entities/price-list/lib/selectors'
 import { downloadCsv } from '@/shared/lib/downloadCsv'
@@ -91,6 +92,20 @@ export function PriceList() {
         'сорта',
         'сортов',
       )}${onlyInStock ? ' в наличии' : ''}.`
+
+  const visibleCategory = isDesktop
+    ? activeCategory
+    : (priceCategories.find((category) => category.id === openCategoryId) ?? null)
+  const printCategories = isSearching
+    ? searchResults
+    : visibleCategory
+      ? [visibleCategory]
+      : []
+  const exportCategories = getVisibleCategories(printCategories, {
+    onlyInStock,
+    sort,
+  })
+  const hasExportableRows = exportCategories.length > 0
 
   useEffect(() => {
     const categoryParam = searchParams.get('category')
@@ -227,13 +242,17 @@ export function PriceList() {
     `prajs-list-${new Date().toISOString().slice(0, 10)}.${extension}`
 
   const handleDownloadCsv = () => {
+    if (!hasExportableRows) {
+      return
+    }
+
     setIsDownloadOpen(false)
     setExportError(null)
-    downloadCsv(getDownloadFilename('csv'), buildCsvRows(priceCategories))
+    downloadCsv(getDownloadFilename('csv'), buildCsvRows(exportCategories))
   }
 
   const handleDownloadExcel = async () => {
-    if (isExporting) {
+    if (isExporting || !hasExportableRows) {
       return
     }
 
@@ -243,7 +262,7 @@ export function PriceList() {
 
     try {
       await downloadPriceListExcel(
-        priceCategories,
+        exportCategories,
         getDownloadFilename('xlsx'),
       )
     } catch (error) {
@@ -308,6 +327,7 @@ export function PriceList() {
                 type="button"
                 className={styles.actionButton}
                 onClick={() => window.print()}
+                disabled={!hasExportableRows}
               >
                 <Printer aria-hidden strokeWidth={1.75} />
                 Печать
@@ -324,7 +344,7 @@ export function PriceList() {
                   aria-controls={
                     isDownloadOpen ? 'price-download-menu' : undefined
                   }
-                  disabled={isExporting}
+                  disabled={isExporting || !hasExportableRows}
                 >
                   <Download aria-hidden strokeWidth={1.75} />
                   {isExporting ? 'Готовим файл…' : 'Скачать'}
@@ -363,7 +383,7 @@ export function PriceList() {
                         Excel (.xlsx)
                       </span>
                       <span className={styles.downloadHint}>
-                        Один лист со всеми сортами
+                        Один лист с текущей выборкой
                       </span>
                     </button>
                   </div>
@@ -506,12 +526,12 @@ export function PriceList() {
           у продавца.
         </p>
         <div className={styles.printList}>
-          {priceCategories.map((category) => (
+          {printCategories.map((category) => (
             <PriceTable
               key={category.id}
               category={category}
-              onlyInStock={false}
-              sort="default"
+              onlyInStock={onlyInStock}
+              sort={sort}
               onSortChange={handleSortChange}
               printMode
               idPrefix={`print-${category.id}`}

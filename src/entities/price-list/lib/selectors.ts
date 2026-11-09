@@ -98,6 +98,27 @@ export function getVisibleRows(
   return sortRows(filterRows(category.rows, options.onlyInStock), options.sort)
 }
 
+/**
+ * Оставляет только категории, у которых есть видимые строки,
+ * и применяет к ним текущий фильтр и сортировку.
+ */
+export function getVisibleCategories(
+  categories: PriceCategory[],
+  options: VisibleRowsOptions,
+): PriceCategory[] {
+  return categories.flatMap((category) => {
+    if (category.groups?.length) {
+      const groups = getVisibleGroups(category, options)
+
+      return groups.length > 0 ? [{ ...category, rows: [], groups }] : []
+    }
+
+    const rows = getVisibleRows(category, options)
+
+    return rows.length > 0 ? [{ ...category, rows }] : []
+  })
+}
+
 function compareByPrice(a: PriceRow, b: PriceRow, direction: 1 | -1): number {
   if (a.price === null && b.price === null) {
     return collator.compare(a.name, b.name)

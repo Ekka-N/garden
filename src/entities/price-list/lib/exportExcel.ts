@@ -62,7 +62,6 @@ export async function downloadPriceListExcel(
 
   for (const row of rows) {
     const sheetRow = sheet.addRow({
-      category: row.category,
       section: row.section,
       name: row.name,
       ripening: row.ripening,
@@ -75,7 +74,7 @@ export async function downloadPriceListExcel(
     sheetRow.eachCell((cell, columnNumber) => {
       cell.alignment = {
         vertical: 'top',
-        wrapText: columnNumber === 5,
+        wrapText: columnNumber === 4,
       }
     })
 

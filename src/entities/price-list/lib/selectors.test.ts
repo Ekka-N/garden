@@ -3,6 +3,7 @@ import type { PriceCategory, PriceRow } from '../model/types'
 import {
   filterRows,
   getCategorySummary,
+  getVisibleCategories,
   getVisibleGroups,
   getVisibleRows,
   searchCategories,
@@ -161,6 +162,34 @@ describe('getVisibleGroups', () => {
 
     expect(groups.map((group) => group.id)).toEqual(['first', 'second'])
     expect(groups[0].rows.map((row) => row.id)).toEqual(['one', 'two'])
+  })
+})
+
+describe('getVisibleCategories', () => {
+  it('оставляет только непустые категории и применяет фильтр и сортировку', () => {
+    const flat: PriceCategory = {
+      id: 'flat',
+      title: 'Плоская',
+      updatedAt: '2026-01-01',
+      rows,
+    }
+    const empty: PriceCategory = {
+      id: 'empty',
+      title: 'Пустая',
+      updatedAt: '2026-01-01',
+      rows: [{ id: 'sold', name: 'Продан', price: null }],
+    }
+
+    const result = getVisibleCategories([flat, empty, groupedCategory], {
+      onlyInStock: true,
+      sort: 'price-asc',
+    })
+
+    expect(result.map((category) => category.id)).toEqual(['flat', 'grouped'])
+    expect(result[0].rows.map((row) => row.id)).toEqual(['pear', 'apple'])
+    expect(result[1].rows).toEqual([])
+    expect(result[1].groups?.map((group) => group.id)).toEqual(['first'])
+    expect(result[1].groups?.[0].rows.map((row) => row.id)).toEqual(['one'])
   })
 })
 

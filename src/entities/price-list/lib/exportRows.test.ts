@@ -5,6 +5,7 @@ import {
   buildCsvRows,
   buildExportRows,
 } from './exportRows'
+import { getVisibleCategories } from './selectors'
 
 describe('buildExportRows', () => {
   it('разворачивает весь прайс в 322 строки', () => {
@@ -59,8 +60,34 @@ describe('buildCsvRows', () => {
     )
     const csvRow = buildCsvRows(priceCategories)[index + 1]
 
-    expect(csvRow[2]).toBe('Гирлянда')
-    expect(csvRow[6]).toBe('')
-    expect(csvRow[7]).toBe('нет в наличии')
+    expect(csvRow[1]).toBe('Гирлянда')
+    expect(csvRow[5]).toBe('')
+    expect(csvRow[6]).toBe('нет в наличии')
+  })
+
+  it('экспортирует только видимые строки выбранной категории', () => {
+    const cherries = priceCategories.find(
+      (category) => category.id === 'cherries',
+    )
+
+    if (!cherries) {
+      throw new Error('Категория «Черешни и вишни» не найдена')
+    }
+
+    const visibleCategories = getVisibleCategories([cherries], {
+      onlyInStock: true,
+      sort: 'price-asc',
+    })
+    const allCategories = getVisibleCategories([cherries], {
+      onlyInStock: false,
+      sort: 'default',
+    })
+    const rows = buildExportRows(visibleCategories)
+
+    expect(rows.length).toBeGreaterThan(0)
+    expect(rows.length).toBeLessThan(buildExportRows(allCategories).length)
+    expect(rows.every((row) => row.category === 'Черешни и вишни')).toBe(true)
+    expect(rows.every((row) => row.availability === 'в наличии')).toBe(true)
+    expect(buildCsvRows(visibleCategories)).toHaveLength(rows.length + 1)
   })
 })

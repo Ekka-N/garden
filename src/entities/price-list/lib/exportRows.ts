@@ -18,7 +18,6 @@ export interface ExportColumn {
 }
 
 export const EXPORT_COLUMNS: ExportColumn[] = [
-  { key: 'category', title: 'Категория', width: 24 },
   { key: 'section', title: 'Раздел', width: 30 },
   { key: 'name', title: 'Сорт', width: 40 },
   { key: 'ripening', title: 'Срок созревания', width: 20 },
@@ -45,7 +44,6 @@ export function buildExportRows(categories: PriceCategory[]): PriceExportRow[] {
 export function buildCsvRows(categories: PriceCategory[]): string[][] {
   const headers = EXPORT_COLUMNS.map((column) => column.title)
   const rows = buildExportRows(categories).map((row) => [
-    row.category,
     row.section,
     row.name,
     row.ripening,
