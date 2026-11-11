@@ -8,14 +8,14 @@ export function toMinutes(time: string): number {
 
 export type ScheduleStatus =
   | { state: 'open'; closesAt: string }
-  | { state: 'opens-soon'; opensAt: string }
   | { state: 'closed' }
 
 export function getScheduleStatus(
   day: WorkingDay | undefined,
   now: Date,
+  enabled = true,
 ): ScheduleStatus {
-  if (!day) {
+  if (!enabled || !day) {
     return { state: 'closed' }
   }
 
@@ -27,10 +27,6 @@ export function getScheduleStatus(
     return { state: 'open', closesAt: day.closesAt }
   }
 
-  if (minutes < opensAt) {
-    return { state: 'opens-soon', opensAt: day.opensAt }
-  }
-
   return { state: 'closed' }
 }
 
@@ -38,8 +34,6 @@ export function getStatusLabel(status: ScheduleStatus): string {
   switch (status.state) {
     case 'open':
       return `Открыто до ${status.closesAt}`
-    case 'opens-soon':
-      return `Откроется в ${status.opensAt}`
     case 'closed':
       return 'Закрыто'
   }

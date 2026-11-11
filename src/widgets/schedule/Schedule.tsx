@@ -20,8 +20,11 @@ export function Schedule() {
   const now = useNow()
   const today = now.getDay()
   const todayHours = NURSERY.hours.find((day) => day.weekday === today)
-  const status = getScheduleStatus(todayHours, now)
+  const status = getScheduleStatus(todayHours, now, NURSERY.scheduleEnabled)
   const statusLabel = getStatusLabel(status)
+  const notice = NURSERY.scheduleEnabled
+    ? NURSERY.saleUntil
+    : NURSERY.closedNotice
 
   return (
     <section className={styles.card} aria-labelledby="schedule-heading">
@@ -41,38 +44,40 @@ export function Schedule() {
         </p>
       </div>
 
-      {NURSERY.saleUntil && (
+      {notice && (
         <p className={styles.notice}>
           <CalendarClock
             className={styles.noticeIcon}
             aria-hidden
             strokeWidth={1.75}
           />
-          {NURSERY.saleUntil}
+          {notice}
         </p>
       )}
 
-      <ul className={styles.list}>
-        {NURSERY.hours.map((day) => {
-          const isToday = day.weekday === today
+      {NURSERY.scheduleEnabled && (
+        <ul className={styles.list}>
+          {NURSERY.hours.map((day) => {
+            const isToday = day.weekday === today
 
-          return (
-            <li
-              key={day.weekday}
-              className={isToday ? `${styles.row} ${styles.today}` : styles.row}
-              aria-current={isToday ? 'date' : undefined}
-            >
-              <span className={styles.day}>
-                {day.label}
-                {isToday && <span className={styles.todayBadge}>Сегодня</span>}
-              </span>
-              <span className={styles.time}>
-                {day.opensAt}–{day.closesAt}
-              </span>
-            </li>
-          )
-        })}
-      </ul>
+            return (
+              <li
+                key={day.weekday}
+                className={isToday ? `${styles.row} ${styles.today}` : styles.row}
+                aria-current={isToday ? 'date' : undefined}
+              >
+                <span className={styles.day}>
+                  {day.label}
+                  {isToday && <span className={styles.todayBadge}>Сегодня</span>}
+                </span>
+                <span className={styles.time}>
+                  {day.opensAt}–{day.closesAt}
+                </span>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </section>
   )
 }
