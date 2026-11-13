@@ -4,8 +4,10 @@ import { fileURLToPath, URL } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 
-// GitHub Pages отдаёт проект по адресу https://<user>.github.io/<repo>/
-const BASE_PATH = '/garden/'
+// GitHub Pages отдаёт проект по корню домена sad-nikishin.ru.
+// Если когда-нибудь понадобится вернуться на https://<user>.github.io/<repo>/,
+// достаточно заменить '/' на '/<repo>/'.
+const BASE_PATH = '/'
 
 const distDir = fileURLToPath(new URL('./dist', import.meta.url))
 

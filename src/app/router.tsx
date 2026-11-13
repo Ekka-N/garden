@@ -4,9 +4,10 @@ import { HomePage } from '@/pages/home/HomePage'
 import { PriceListPage } from '@/pages/price-list/PriceListPage'
 import { RecommendationsPage } from '@/pages/recommendations/RecommendationsPage'
 
-// import.meta.env.BASE_URL — это base из vite.config.ts ('/garden/' в сборке, '/' в dev).
-// React Router ожидает basename без завершающего слэша.
-const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+// import.meta.env.BASE_URL — это base из vite.config.ts ('/' при деплое на своём домене).
+// В корне домена basename не нужен, поэтому передаём undefined.
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
+const basename = baseUrl === '' ? undefined : baseUrl
 
 export const router = createBrowserRouter(
   [
