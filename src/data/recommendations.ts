@@ -1,3 +1,5 @@
+import { assetUrl } from '@/shared/lib/assetUrl'
+
 export interface RecommendationImage {
   src: string
   alt: string
@@ -15,7 +17,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-smorodiny',
     title: 'Посадка смородины',
     image: {
-      src: '/images/recommendations/posadka-smorodiny.jpg',
+      src: assetUrl('/images/recommendations/posadka-smorodiny.jpg'),
       alt: 'Посадка саженца смородины',
     },
     paragraphs: [
@@ -28,7 +30,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-sazhentsev',
     title: 'Посадка саженцев',
     image: {
-      src: '/images/recommendations/posadka-sazhentsev.jpg',
+      src: assetUrl('/images/recommendations/posadka-sazhentsev.jpg'),
       alt: 'Посадка плодового саженца',
     },
     paragraphs: [
@@ -46,7 +48,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-roz',
     title: 'Посадка роз',
     image: {
-      src: '/images/recommendations/posadka-roz.jpg',
+      src: assetUrl('/images/recommendations/posadka-roz.jpg'),
       alt: 'Посадка саженца розы',
     },
     paragraphs: [
@@ -59,7 +61,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-maliny',
     title: 'Посадка малины',
     image: {
-      src: '/images/recommendations/posadka-maliny.jpg',
+      src: assetUrl('/images/recommendations/posadka-maliny.jpg'),
       alt: 'Посадка саженца малины',
     },
     paragraphs: [
@@ -72,7 +74,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-kryzhovnika',
     title: 'Посадка крыжовника',
     image: {
-      src: '/images/recommendations/posadka-kryzhovnika.jpg',
+      src: assetUrl('/images/recommendations/posadka-kryzhovnika.jpg'),
       alt: 'Посадка саженца крыжовника',
     },
     paragraphs: [
@@ -87,7 +89,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-vinograda',
     title: 'Посадка винограда',
     image: {
-      src: '/images/recommendations/posadka-vinograda.jpg',
+      src: assetUrl('/images/recommendations/posadka-vinograda.jpg'),
       alt: 'Посадка саженца винограда',
     },
     paragraphs: [
@@ -100,7 +102,7 @@ export const recommendations: Recommendation[] = [
     id: 'posadka-klubniki',
     title: 'Посадка клубники',
     image: {
-      src: '/images/recommendations/posadka-klubniki.jpg',
+      src: assetUrl('/images/recommendations/posadka-klubniki.jpg'),
       alt: 'Посадка рассады клубники',
     },
     paragraphs: [
